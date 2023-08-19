@@ -1,0 +1,9 @@
+Employee(sin INT, name TEXT, address VARCHAR, phone BIGINT, salary REAL, conservation CHAR(1), restoration CHAR(1), both_tech CHAR(1), guide CHAR(1), exam_date DATE, union_membership INT, f_o_e VARCHAR)
+
+Keys of employee: (sin)
+
+Artifacts(artifact_num CHAR(5), dimensions TEXT, weight REAL, material TEXT, r_o_s_h REAL, test_num INT, test_name TEXT, max_score INT, score INT, technician INT, date DATE, time_spent TIME)
+
+Keys of artifacts: foreignkey (technician) references employee(sin)
+
+I made two tables one for employees and one for artifacts. The 'sin' refers to the social insurance number of employee and is unique and therefore my Primary unique key. name is the name of the employee as a text, address is 'house number, street name, city' and is of varchar to account for variety in length. phone number required BIGINT because it is 10 digits and exceeds the max of INT. salary is the yearly income of employees. conservation, restoration, both_tech, guide, is the employee positions and is stored as a 'y' or 'n' as 1 character. exam_date is for the exam date conducted bi-annually for guides. union_membership is the union membership number of employees. f_o_e is the field(s) of expertise for technicians. Artifact_num is the artifact number as specified in the assingment handout. dimensions is in the form 'LxWxH' in cm. weight is stored in kg. material is stored as a TEXT for material(s). r_o_s_h recommended optimal storage humidity, a percentage of 0-100. test_num is the test number of artifact tested. test_name is the name of the test administered. max_score is the maximum possible score for each test. score is the actual score achived by techician. technician is the S.I.N. of technician doing the testing and is the key as a reference to the primary key from employee relation. date is the date the test was conducted. time_spent is the time spent by conducting the test.

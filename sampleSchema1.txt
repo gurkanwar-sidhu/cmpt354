@@ -1,0 +1,95 @@
+---PART 2: 
+
+CREATE TABLE Material(
+	name varchar(20) PRIMARY KEY,
+	optimal_humidity integer -- in g/(m^3)
+);
+
+CREATE TABLE Artifact(
+	artifact_num varchar(10) PRIMARY KEY,
+	height numeric(5,3), --in meters
+	width numeric(5,3), -- in meters
+	length numeric(5,3), --in meters
+	weight numeric(7,3), --in kilograms
+	material varchar(10) REFERENCES Material(name)
+);
+
+CREATE TABLE Employee(
+	sin varchar(9) PRIMARY KEY,
+	name varchar(20),
+	address varchar(20),
+	phone varchar(12),
+	union_member_num varchar(10) UNIQUE NOT NULL,
+	salary numeric(8,2)
+);
+
+CREATE TABLE Technician(
+	employee varchar(9) PRIMARY KEY REFERENCES Employee(sin),
+	role varchar(20) CHECK(role='restorer' or role='conservationist' or role='both')
+);
+
+CREATE TABLE Museum_Guide(
+	employee varchar(9) PRIMARY KEY REFERENCES Employee(sin),
+	last_exam_date date NOT NULL
+);
+
+CREATE TABLE Technician_Material(
+	technician varchar(9) REFERENCES Technician(employee),
+	material varchar(20) REFERENCES Material(name),
+	PRIMARY KEY (technician, material)
+);
+
+CREATE TABLE Test(
+	ministry_test_num varchar(10) PRIMARY KEY,
+	name varchar(20),
+	max_score integer
+);
+
+CREATE TABLE Test_Event(
+	test_date date,
+	test_num varchar(10) REFERENCES Test(ministry_test_num),
+	score integer,
+	num_hours integer,
+	artifact varchar(10) REFERENCES Artifact(artifact_num),
+	technician varchar(9) REFERENCES Technician(employee),
+	PRIMARY KEY(test_num, test_date, artifact)
+);
+
+
+---PART 3: 
+
+INSERT INTO Material VALUES('clay','40');
+INSERT INTO Material VALUES('glass','20');
+INSERT INTO Material VALUES('bronze','25');
+INSERT INTO Material VALUES('gold','38');
+INSERT INTO Material VALUES('fabric','60');
+
+INSERT INTO Artifact VALUES('DA140','0.09','0.045','0.03','0.25','clay');
+INSERT INTO Artifact VALUES('CB140','0.54','0.26','0.2','2.6','bronze');
+INSERT INTO Artifact VALUES('AP228','1.56','0.42','0.33','46.2','glass');
+
+INSERT INTO Employee VALUES('1','Abi','11123','604-254-2225','11','42000');
+INSERT INTO Employee VALUES('2','Bob','42425','604-617-2485','22','114000');
+INSERT INTO Employee VALUES('3','Cam','88167','604-881-1152','33','51600');
+INSERT INTO Employee VALUES('4','Alia','14420','604-991-1125','44','189000');
+
+INSERT INTO Technician VALUES('1','restorer');
+INSERT INTO Technician VALUES('4','both');
+
+INSERT INTO Museum_Guide VALUES('2','2019-01-13');
+INSERT INTO Museum_Guide VALUES('3','2018-09-25');
+
+INSERT INTO Technician_Material VALUES('1','clay');
+INSERT INTO Technician_Material VALUES('1','bronze');
+INSERT INTO Technician_Material VALUES('1','glass');
+INSERT INTO Technician_Material VALUES('4','gold');
+INSERT INTO Technician_Material VALUES('4','clay');
+INSERT INTO Technician_Material VALUES('4','fabric');
+
+INSERT INTO Test VALUES('TF101','Hum Test',10);
+INSERT INTO Test VALUES('TC203','Temp Test',25);
+INSERT INTO Test VALUES('SV404','Store Test',15);
+
+INSERT INTO Test_Event VALUES('2018-02-15','TF101',8,2,'DA140','1');
+INSERT INTO Test_Event VALUES('2018-03-07','TC203',19,6,'CB140','4');
+INSERT INTO Test_Event VALUES('2018-03-07','SV404',15,2,'AP228','1');

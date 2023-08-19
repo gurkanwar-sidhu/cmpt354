@@ -1,0 +1,39 @@
+CREATE TABLE employee(
+sin INT PRIMARY KEY,
+name TEXT,
+address VARCHAR,
+phone BIGINT,
+salary REAL,
+conservation CHAR(1),
+restoration CHAR(1),
+both_tech CHAR(1),
+guide CHAR(1),
+exam_date DATE,
+union_membership INT,
+f_o_e VARCHAR
+);
+
+CREATE TABLE artifacts(
+artifact_num CHAR(5),
+dimensions TEXT,
+weight REAL,
+material TEXT,
+r_o_s_h REAL,
+test_num INT,
+test_name TEXT,
+max_score INT,
+score INT,
+technician INT REFERENCES employee(sin),
+date DATE,
+time_spent TIME
+);
+
+INSERT INTO employee (sin, name, address, phone, salary, conservation, restoration, both_tech, guide, union_membership, f_o_e) VALUES(999999999, 'John Doe', '1234 Random St Vancouver', 6045551234, 50000, 'y', 'n', 'n', 'n', 0155, 'gold, silver, bronze');
+
+INSERT INTO artifacts(artifact_num, dimensions, weight, material, r_o_s_h, test_num, test_name, max_score, score, technician, date, time_spent) VALUES('CL892', '5x10x15', 5.85, 'GOLD', 50, 0015, 'Wear and Tear test', 100, 80, 000123456, '2018-10-31', '23:00:05');
+
+
+
+
+
+

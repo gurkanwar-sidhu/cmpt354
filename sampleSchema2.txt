@@ -1,0 +1,103 @@
+
+CREATE TABLE material(
+m_name TEXT PRIMARY KEY
+);
+
+CREATE TABLE artifact(
+artifact_id     VARCHAR(6)      PRIMARY KEY,
+width           NUMERIC(10,2),
+height          NUMERIC(10,2),
+weight          NUMERIC(10,2),
+material        TEXT            REFERENCES material(m_name),
+opt_humidity    NUMERIC(10,2)
+);
+
+CREATE TABLE employee(
+sin         INTEGER     PRIMARY KEY,
+union_num   INTEGER
+);
+
+CREATE TABLE guide(
+sin INTEGER REFERENCES employee(sin) PRIMARY KEY,
+last_exam_date DATE
+);
+
+CREATE TABLE technician_job_type(
+type_name TEXT PRIMARY KEY
+);
+
+CREATE TABLE technician(
+name        TEXT,
+sin         INTEGER  REFERENCES employee(sin) PRIMARY KEY,
+address     VARCHAR,
+phone_num   VARCHAR,
+salary      INTEGER,
+job_type    TEXT    REFERENCES technician_job_type(type_name)
+);
+
+CREATE TABLE material_expertise(
+techinician_sin INTEGER REFERENCES technician(sin),
+m_name          TEXT    REFERENCES material(m_name),
+PRIMARY KEY (techinician_sin, m_name)
+);
+
+CREATE TABLE test(
+test_num    VARCHAR     PRIMARY KEY,
+test_name   TEXT,
+max_score   NUMERIC
+);
+
+CREATE TABLE inspection(
+artifact_id     VARCHAR(6) REFERENCES artifact(artifact_id),
+technician_sin  INTEGER REFERENCES technician(sin),
+test_num        VARCHAR REFERENCES test(test_num),
+date            DATE,
+duration        INTEGER,
+score           NUMERIC,
+PRIMARY KEY (artifact_id, technician_sin, test_num)
+);
+
+
+
+-------------------------------------------------------------------------------
+
+
+
+INSERT INTO material(m_name) values ('clay'), ('glass'), ('bronze');
+
+INSERT INTO artifact(artifact_id, width, height, weight, material, opt_humidity) values 
+(000001, 20.00, 20.00, 20.00, 'clay', 10.0),
+(000002, 10.00, 10.00, 10.00, 'clay', 40.0),
+(000003, 100, 100, 100, 'glass', 70.0);
+
+INSERT INTO employee(sin, union_num) values
+(1, 1),
+(2, 1),
+(3, 2),
+(4, 3);
+
+insert into material_expertise(techinician_sin, m_name) values
+(1, 'glass'),
+(1, 'clay'),
+(2, 'glass'),
+(3, 'glass'),
+(1, 'bronze');
+
+INSERT INTO guide(sin, last_exam_date) values
+(4, '2018-10-10');
+
+INSERT INTO technician_job_type(type_name) values
+('conservationist'),
+('restorer'),
+('conservationist and restorer');
+
+INSERT INTO technician(name, sin, address, phone_num, salary, job_type) values
+('ivanov', 1, 'slav street', '7781231234', 10000, 'restorer'),
+('ivanovic', 2, 'babushka street', '7781231235', 5000, 'restorer'),
+('ivanovsky', 3, 'slav street', '7781231236', 40000, 'conservationist and restorer');
+
+INSERT into test(test_num, test_name, max_score) values
+(1, 'safety test', 5);
+
+INSERT INTO inspection(artifact_id, technician_sin, test_num, date, duration, score) values
+(1, 1, 1, '2018-07-01', 2, 5);

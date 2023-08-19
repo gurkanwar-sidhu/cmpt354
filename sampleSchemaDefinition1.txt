@@ -1,0 +1,36 @@
+---PART 1:
+
+RELATIONS:
+
+Material(name varchar(20), optimal_humidity integer)
+Primary Key of Material: name
+
+Artifact(artifact_num varchar(10), height numeric(5,3), width numeric(5,3), length numeric(5,3), weight numeric(7,3), material varchar(10))
+Primary Key of Artifact: artifact_num
+Foreign Key of Artifact: material->Material(name)
+
+Employee(sin varchar(9), name varchar(20), address varchar(20), phone varchar(12), union_member_num varchar(10), salary numeric(8,2))
+Primary Key of Employee: sin
+
+Technician(employee varchar(9),	role varchar(20))
+Primary Key of Technician: employee
+Foreign Key of Technician: employee->Employee(sin)
+
+Museum_Guide(employee varchar(9), last_exam_date date)
+Primary Key of Museum_Guide: employee
+Foreign Key of Museum_Guide: employee->Employee(sin)
+
+Technician_Material(technician varchar(9), material varchar(20))
+Primary Key of Technician_Material: (technician, material)
+Foreign Keys of Technician_Materials: (technician->Technician(employee), material->Material(name))
+
+Test(ministry_test_num varchar(10), name varchar(20), max_score integer)
+Primary Key of Test: ministry_test_num
+
+Test_Event(test_date date, test_num varchar(10), score integer,	num_hours integer, artifact varchar(10), technician varchar(9))
+Primary Key of Test_Event: (test_num, test_date, artifact)
+Foreign Keys of Test_Event: (test_num->Test(ministry_test_num), artifact->Artifact(artifact_num), technician->Technician(employee))
+
+
+Explanation for schema:
+I made an Employee entity set, and Technician and Museum_Guide entity sets that have a unique foreign key to Employee to avoid redundancy of basic employee information. I made an entity set Artifact_Material, so that I could create a many-to-many relationship between Technicians and Materials they have expertise in. I made an Artifact entity set that has a foreign key to Artifact_Material because each Artifact has a material. I created a Test entity set for Tests, and a separate entity set for Test_Event that has foreign keys to the technician who administered it, the artifact that was tested, and the Test that was done. I used integers for basic things such as height, width, length of artifacts, and for score, adn used varchar for important things like sin, union membership numbers, and some identifying primary keys that could contain letters. I have unique constraints for union number because each membership number is unique, and I have not null for it as well because each employee must have one. I put a constraint on Museum_guide role because they can only be restorer, conservationist, or both.

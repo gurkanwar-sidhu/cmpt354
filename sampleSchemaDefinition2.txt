@@ -1,0 +1,75 @@
+material(m_name TEXT)
+Keys of material: {m_name}
+
+
+artifact(
+artifact_id     VARCHAR(6),
+width           NUMERIC(10,2),
+height          NUMERIC(10,2),
+weight          NUMERIC(10,2),
+material        TEXT,
+opt_humidity    NUMERIC(10,2))
+Keys of artifact: {artifact_id}, {material}
+
+
+employee(sin INTEGER, union_num INTEGER)
+Keys of artifact: {sin}
+
+
+guide(sin INTEGER, last_exam_date DATE)
+Keys of sin: {sin}
+
+
+technician_job_type(type_name TEXT)
+keys of technician_job_type: {type_name}
+
+
+technician(
+name        TEXT,
+sin         INTEGER  REFERENCES employee(sin) PRIMARY KEY,
+address     VARCHAR,
+phone_num   VARCHAR,
+salary      INTEGER,
+job_type    TEXT)
+Keys of technician: {sin, job_type}
+
+
+material_expertise(
+techinician_sin INTEGER,
+m_name          TEXT,)
+keys of material_expertise: {technician_sin}, {m_name}, {technician_sin, m_name}
+
+
+test(
+test_num    VARCHAR,
+test_name   TEXT,
+max_score   NUMERIC)
+Keys of test: {test_num}
+
+
+inspection(
+artifact_id     VARCHAR(6) REFERENCES artifact(artifact_id),
+technician_sin  INTEGER REFERENCES technician(sin),
+test_num        VARCHAR REFERENCES test(test_num),
+date            DATE,
+duration        INTEGER,
+score           NUMERIC,)
+Keys of inspection: {artifact_id}, {techinician_sin}, {test_num}, {artifact_id, techinician_sin, test_num}
+
+
+
+Schema Explanation:
+
+artifact relation has artifact_id column of data type varchar to accomodate characters in artifact_id
+and is primary key because it is good candidate to establish uniqueness in artifact relation. Width, height, 
+dimension and humidity are numeric because they are measurable values. material column is foreign key to material 
+relation. I created a material relation so it's useful for querying the material expertise relation
+used to identify all the experts of a certain material.
+Created employee relation so it's SIN primary key can be used by separate guide and technician relations by using 
+in as foreign key in guide and technician relations. technician_job_type relation would be useful later on for 
+allowing a discrete number of choices(conservationist, restorer or both) for technician's job type in technician 
+relation. material expertise relation uses technician.sin as foreign key so guides cannot be included in this 
+relation primary key is both columns to establish uniqueness. test relation has test_num as primary key because 
+it is unique. inspection relation uses artifact.artifact_id, technician.technician_sin, test.test_num as foreign 
+keys so that it only refers to pre-existing values for those 3 columns, which when grouped together form a unique 
+primary key. Date used as type for dates because more suitable than integer.
